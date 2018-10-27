@@ -1,0 +1,784 @@
+func main()
+	do @wndMain :: wnd@makeWnd(null, %normal, 1100, 900, "Title")
+	do @Sall :: #[64]int
+	do @first()
+	do @Set()
+	do @Sable :: #list<int>
+	do @Turnstonesall :: #list<int>
+	do @SetBtn()
+	do @Draw :: wnd@makeDraw(@wndMain, 0, 0, 900, 900, %scale, %scale, false)
+	var font: draw@Font :: draw@makeFont(null, 30, false, false, true, 0.0)
+	while(wnd@act())
+		do @Auto()
+		if(@Turn = true)
+			do font.draw(0.0, 0.0, "今は黒番です", 0xFFFFFFFF)
+		else
+			do font.draw(0.0, 0.0, "今は白番です", 0xFFFFFFFF)
+		end if
+		do @Drawing()
+		if(@Passcount = 2)
+			do @Rsop()
+		end if
+	end while
+end func
+;windowボタン定義 funcmainは最後にあります
+var wndMain: wnd@Wnd
+var B11: wnd@Btn
+var B12: wnd@Btn
+var B13: wnd@Btn
+var B14: wnd@Btn
+var B15: wnd@Btn
+var B16: wnd@Btn
+var B17: wnd@Btn
+var B18: wnd@Btn
+var B21: wnd@Btn
+var B22: wnd@Btn
+var B23: wnd@Btn
+var B24: wnd@Btn
+var B25: wnd@Btn
+var B26: wnd@Btn
+var B27: wnd@Btn
+var B28: wnd@Btn
+var B31: wnd@Btn
+var B32: wnd@Btn
+var B33: wnd@Btn
+var B34: wnd@Btn
+var B35: wnd@Btn
+var B36: wnd@Btn
+var B37: wnd@Btn
+var B38: wnd@Btn
+var B41: wnd@Btn
+var B42: wnd@Btn
+var B43: wnd@Btn
+var B44: wnd@Btn
+var B45: wnd@Btn
+var B46: wnd@Btn
+var B47: wnd@Btn
+var B48: wnd@Btn
+var B51: wnd@Btn
+var B52: wnd@Btn
+var B53: wnd@Btn
+var B54: wnd@Btn
+var B55: wnd@Btn
+var B56: wnd@Btn
+var B57: wnd@Btn
+var B58: wnd@Btn
+var B61: wnd@Btn
+var B62: wnd@Btn
+var B63: wnd@Btn
+var B64: wnd@Btn
+var B65: wnd@Btn
+var B66: wnd@Btn
+var B67: wnd@Btn
+var B68: wnd@Btn
+var B71: wnd@Btn
+var B72: wnd@Btn
+var B73: wnd@Btn
+var B74: wnd@Btn
+var B75: wnd@Btn
+var B76: wnd@Btn
+var B77: wnd@Btn
+var B78: wnd@Btn
+var B81: wnd@Btn
+var B82: wnd@Btn
+var B83: wnd@Btn
+var B84: wnd@Btn
+var B85: wnd@Btn
+var B86: wnd@Btn
+var B87: wnd@Btn
+var B88: wnd@Btn
+var Ng: wnd@Btn
+;マスの状態定義
+var Sall: []int
+;パス2回のカウント
+var Passcount: int
+;ターン定義
+var Turn: bool
+var Turnfirst: bool
+;ひっくり返せない時のやつ
+var none: int
+;置けるか表示チェック 評価値辞書
+var stoneable: bool
+var turnstones: int
+var Sable: list<int>
+var Turnstonesall: list<int>
+func Set()
+	do @B11 :: wnd@makeBtn(@wndMain, 50, 50, 100, 100, %fix, %fix, "11")
+	do @B12 :: wnd@makeBtn(@wndMain, 150, 50, 100, 100, %fix, %fix, "12")
+	do @B13 :: wnd@makeBtn(@wndMain, 250, 50, 100, 100, %fix, %fix, "13")
+	do @B14 :: wnd@makeBtn(@wndMain, 350, 50, 100, 100, %fix, %fix, "14")
+	do @B15 :: wnd@makeBtn(@wndMain, 450, 50, 100, 100, %fix, %fix, "15")
+	do @B16 :: wnd@makeBtn(@wndMain, 550, 50, 100, 100, %fix, %fix, "16")
+	do @B17 :: wnd@makeBtn(@wndMain, 650, 50, 100, 100, %fix, %fix, "17")
+	do @B18 :: wnd@makeBtn(@wndMain, 750, 50, 100, 100, %fix, %fix, "18")
+	do @B21 :: wnd@makeBtn(@wndMain, 50, 150, 100, 100, %fix, %fix, "21")
+	do @B22 :: wnd@makeBtn(@wndMain, 150, 150, 100, 100, %fix, %fix, "22")
+	do @B23 :: wnd@makeBtn(@wndMain, 250, 150, 100, 100, %fix, %fix, "23")
+	do @B24 :: wnd@makeBtn(@wndMain, 350, 150, 100, 100, %fix, %fix, "24")
+	do @B25 :: wnd@makeBtn(@wndMain, 450, 150, 100, 100, %fix, %fix, "25")
+	do @B26 :: wnd@makeBtn(@wndMain, 550, 150, 100, 100, %fix, %fix, "26")
+	do @B27 :: wnd@makeBtn(@wndMain, 650, 150, 100, 100, %fix, %fix, "27")
+	do @B28 :: wnd@makeBtn(@wndMain, 750, 150, 100, 100, %fix, %fix, "28")
+	do @B31 :: wnd@makeBtn(@wndMain, 50, 250, 100, 100, %fix, %fix, "31")
+	do @B32 :: wnd@makeBtn(@wndMain, 150, 250, 100, 100, %fix, %fix, "32")
+	do @B33 :: wnd@makeBtn(@wndMain, 250, 250, 100, 100, %fix, %fix, "33")
+	do @B34 :: wnd@makeBtn(@wndMain, 350, 250, 100, 100, %fix, %fix, "34")
+	do @B35 :: wnd@makeBtn(@wndMain, 450, 250, 100, 100, %fix, %fix, "35")
+	do @B36 :: wnd@makeBtn(@wndMain, 550, 250, 100, 100, %fix, %fix, "36")
+	do @B37 :: wnd@makeBtn(@wndMain, 650, 250, 100, 100, %fix, %fix, "37")
+	do @B38 :: wnd@makeBtn(@wndMain, 750, 250, 100, 100, %fix, %fix, "38")
+	do @B41 :: wnd@makeBtn(@wndMain, 50, 350, 100, 100, %fix, %fix, "41")
+	do @B42 :: wnd@makeBtn(@wndMain, 150, 350, 100, 100, %fix, %fix, "42")
+	do @B43 :: wnd@makeBtn(@wndMain, 250, 350, 100, 100, %fix, %fix, "43")
+	do @B44 :: wnd@makeBtn(@wndMain, 350, 350, 100, 100, %fix, %fix, "44")
+	do @B45 :: wnd@makeBtn(@wndMain, 450, 350, 100, 100, %fix, %fix, "45")
+	do @B46 :: wnd@makeBtn(@wndMain, 550, 350, 100, 100, %fix, %fix, "46")
+	do @B47 :: wnd@makeBtn(@wndMain, 650, 350, 100, 100, %fix, %fix, "47")
+	do @B48 :: wnd@makeBtn(@wndMain, 750, 350, 100, 100, %fix, %fix, "48")
+	do @B51 :: wnd@makeBtn(@wndMain, 50, 450, 100, 100, %fix, %fix, "51")
+	do @B52 :: wnd@makeBtn(@wndMain, 150, 450, 100, 100, %fix, %fix, "52")
+	do @B53 :: wnd@makeBtn(@wndMain, 250, 450, 100, 100, %fix, %fix, "53")
+	do @B54 :: wnd@makeBtn(@wndMain, 350, 450, 100, 100, %fix, %fix, "54")
+	do @B55 :: wnd@makeBtn(@wndMain, 450, 450, 100, 100, %fix, %fix, "55")
+	do @B56 :: wnd@makeBtn(@wndMain, 550, 450, 100, 100, %fix, %fix, "56")
+	do @B57 :: wnd@makeBtn(@wndMain, 650, 450, 100, 100, %fix, %fix, "57")
+	do @B58 :: wnd@makeBtn(@wndMain, 750, 450, 100, 100, %fix, %fix, "58")
+	do @B61 :: wnd@makeBtn(@wndMain, 50, 550, 100, 100, %fix, %fix, "61")
+	do @B62 :: wnd@makeBtn(@wndMain, 150, 550, 100, 100, %fix, %fix, "62")
+	do @B63 :: wnd@makeBtn(@wndMain, 250, 550, 100, 100, %fix, %fix, "63")
+	do @B64 :: wnd@makeBtn(@wndMain, 350, 550, 100, 100, %fix, %fix, "64")
+	do @B65 :: wnd@makeBtn(@wndMain, 450, 550, 100, 100, %fix, %fix, "65")
+	do @B66 :: wnd@makeBtn(@wndMain, 550, 550, 100, 100, %fix, %fix, "66")
+	do @B67 :: wnd@makeBtn(@wndMain, 650, 550, 100, 100, %fix, %fix, "67")
+	do @B68 :: wnd@makeBtn(@wndMain, 750, 550, 100, 100, %fix, %fix, "68")
+	do @B71 :: wnd@makeBtn(@wndMain, 50, 650, 100, 100, %fix, %fix, "71")
+	do @B72 :: wnd@makeBtn(@wndMain, 150, 650, 100, 100, %fix, %fix, "72")
+	do @B73 :: wnd@makeBtn(@wndMain, 250, 650, 100, 100, %fix, %fix, "73")
+	do @B74 :: wnd@makeBtn(@wndMain, 350, 650, 100, 100, %fix, %fix, "74")
+	do @B75 :: wnd@makeBtn(@wndMain, 450, 650, 100, 100, %fix, %fix, "75")
+	do @B76 :: wnd@makeBtn(@wndMain, 550, 650, 100, 100, %fix, %fix, "76")
+	do @B77 :: wnd@makeBtn(@wndMain, 650, 650, 100, 100, %fix, %fix, "77")
+	do @B78 :: wnd@makeBtn(@wndMain, 750, 650, 100, 100, %fix, %fix, "78")
+	do @B81 :: wnd@makeBtn(@wndMain, 50, 750, 100, 100, %fix, %fix, "81")
+	do @B82 :: wnd@makeBtn(@wndMain, 150, 750, 100, 100, %fix, %fix, "82")
+	do @B83 :: wnd@makeBtn(@wndMain, 250, 750, 100, 100, %fix, %fix, "83")
+	do @B84 :: wnd@makeBtn(@wndMain, 350, 750, 100, 100, %fix, %fix, "84")
+	do @B85 :: wnd@makeBtn(@wndMain, 450, 750, 100, 100, %fix, %fix, "85")
+	do @B86 :: wnd@makeBtn(@wndMain, 550, 750, 100, 100, %fix, %fix, "86")
+	do @B87 :: wnd@makeBtn(@wndMain, 650, 750, 100, 100, %fix, %fix, "87")
+	do @B88 :: wnd@makeBtn(@wndMain, 750, 750, 100, 100, %fix, %fix, "88")
+	do @Ng :: wnd@makeBtn(@wndMain, 970, 100, 80, 20, %fix, %fix, "Newgame")
+end func
+func SetBtn()
+	do @B11.onPush :: @bop
+	do @B12.onPush :: @bop
+	do @B13.onPush :: @bop
+	do @B14.onPush :: @bop
+	do @B15.onPush :: @bop
+	do @B16.onPush :: @bop
+	do @B17.onPush :: @bop
+	do @B18.onPush :: @bop
+	do @B21.onPush :: @bop
+	do @B22.onPush :: @bop
+	do @B23.onPush :: @bop
+	do @B24.onPush :: @bop
+	do @B25.onPush :: @bop
+	do @B26.onPush :: @bop
+	do @B27.onPush :: @bop
+	do @B28.onPush :: @bop
+	do @B31.onPush :: @bop
+	do @B32.onPush :: @bop
+	do @B33.onPush :: @bop
+	do @B34.onPush :: @bop
+	do @B35.onPush :: @bop
+	do @B36.onPush :: @bop
+	do @B37.onPush :: @bop
+	do @B38.onPush :: @bop
+	do @B41.onPush :: @bop
+	do @B42.onPush :: @bop
+	do @B43.onPush :: @bop
+	do @B44.onPush :: @bop
+	do @B45.onPush :: @bop
+	do @B46.onPush :: @bop
+	do @B47.onPush :: @bop
+	do @B48.onPush :: @bop
+	do @B51.onPush :: @bop
+	do @B52.onPush :: @bop
+	do @B53.onPush :: @bop
+	do @B54.onPush :: @bop
+	do @B55.onPush :: @bop
+	do @B56.onPush :: @bop
+	do @B57.onPush :: @bop
+	do @B58.onPush :: @bop
+	do @B61.onPush :: @bop
+	do @B62.onPush :: @bop
+	do @B63.onPush :: @bop
+	do @B64.onPush :: @bop
+	do @B65.onPush :: @bop
+	do @B66.onPush :: @bop
+	do @B67.onPush :: @bop
+	do @B68.onPush :: @bop
+	do @B71.onPush :: @bop
+	do @B72.onPush :: @bop
+	do @B73.onPush :: @bop
+	do @B74.onPush :: @bop
+	do @B75.onPush :: @bop
+	do @B76.onPush :: @bop
+	do @B77.onPush :: @bop
+	do @B78.onPush :: @bop
+	do @B81.onPush :: @bop
+	do @B82.onPush :: @bop
+	do @B83.onPush :: @bop
+	do @B84.onPush :: @bop
+	do @B85.onPush :: @bop
+	do @B86.onPush :: @bop
+	do @B87.onPush :: @bop
+	do @B88.onPush :: @bop
+	do @Ng.onPush :: @Ngop
+end func
+func first()
+	do @Sall[27] :: 1
+	do @Sall[28] :: 10
+	do @Sall[35] :: 10
+	do @Sall[36] :: 1
+	var a: int
+	do a :: lib@rnd(0, 1)
+	if(a = 0)
+		do @Turn :: false
+		do @Turnfirst :: false
+	else
+		do @Turn :: true
+		do @Turnfirst :: true
+	end if
+	
+end func
+func toint(c: []char, a: &int)
+	for x(1, 8)
+		for y(1, 8)
+			if(c = (10 * x + y).toStr())
+				do a :: 8 * (x - 1) + y - 1
+				ret
+			end if
+		end for
+	end for
+end func
+func bop(b: wnd@Btn)
+	var c: []char :: b.getText()
+	var a: int
+	do @toint(c, &a)
+	if(@Sall[a] = 0)
+		if(@Turn)
+			do @Sall[a] :: 1
+		else
+			do @Sall[a] :: 10
+		end if
+		do @turncheck1(a, true, 0)
+		do @turncheck2(a, true, 0)
+		do @turncheck3(a, true, 0)
+		if(@none < 8)
+			do @Turn :: @Turn ?(false, true)
+			do @nextcheck()
+		else
+			var notice: wnd@MsgBoxResult :: wnd@msgBox(null, "無効な操作です", null, %info, %ok)
+			do @Sall[a] :: 0
+		end if
+		do @none :: 0
+	end if
+	do @Passcount :: 0
+end func
+func bautoop(b: int)
+	if(@Sall[b] = 0)
+		if(@Turn)
+			do @Sall[b] :: 1
+		else
+			do @Sall[b] :: 10
+		end if
+		do @turncheck1(b, true, 0)
+		do @turncheck2(b, true, 0)
+		do @turncheck3(b, true, 0)
+		if(@none < 8)
+			do @Turn :: @Turn ?(false, true)
+			do @Sable.head()
+			while(!@Sable.term())
+				do @Sable.del()
+			end while
+			var sd: int
+			if(@Turn)
+				do sd :: 1
+			else
+				do sd :: 10
+			end if
+			for g(0, 63)
+				if(@Sall[g] = 0)
+					do @turncheck1(g, false, sd)
+					do @turncheck2(g, false, sd)
+					do @turncheck3(g, false, sd)
+					if(@stoneable = true)
+						do @Turnstonesall.add(@turnstones)
+						do @Sable.add(g)
+						do @turnstones :: 0
+						do @stoneable :: false
+					end if
+				end if
+			end for
+		end if
+		do @none :: 0
+	end if
+	do @Passcount :: 0
+end func
+func nextcheck()
+	do @Sable.head()
+	while(!@Sable.term())
+		do @Sable.del()
+	end while
+	do @Turnstonesall.head()
+	while(!@Turnstonesall.term())
+		do @Turnstonesall.del()
+	end while
+	var sd: int
+	if(@Turn)
+		do sd :: 1
+	else
+		do sd :: 10
+	end if
+	var turnablenot: bool
+	for g(0, 63)
+		if(@Sall[g] = 0)
+			do @turncheck1(g, false, sd)
+			do @turncheck2(g, false, sd)
+			do @turncheck3(g, false, sd)
+			if(@stoneable = true)
+				do @Turnstonesall.add(@turnstones)
+				do @Sable.add(g)
+				do @turnstones :: 0
+				do @stoneable :: false
+				do turnablenot :: true
+			end if
+		end if
+	end for
+	var allfilled: bool
+	for as(0, 0)
+		for ga(0, 63)
+			if(@Sall[ga] = 0)
+				break as
+			end if
+		end for
+		do allfilled :: true
+	end for
+	if(turnablenot = false & allfilled = false)
+		var notice: wnd@MsgBoxResult :: wnd@msgBox(null, "打てる場所がありません", null, %info, %ok)
+		do @Psop()
+	end if
+	if(allfilled = true)
+		do @Rsop()
+	end if
+end func
+func Ngop(sender: wnd@Btn)
+	do @Sall.fill(0)
+	do @first()
+	var random: int :: lib@rnd(0, 1)
+	if(random = 0)
+		do @Turn :: true
+		do @Turnfirst :: true
+	else
+		do @Turn :: false
+		do @Turnfirst :: false
+	end if
+	do @Sable.head()
+	while(!@Sable.term())
+		do @Sable.del()
+	end while
+	do @Turnstonesall.head()
+	while(!@Turnstonesall.term())
+		do @Turnstonesall.del()
+	end while
+end func
+func Psop()
+	do @Turn :: @Turn ?(false, true)
+	do @Passcount :: @Passcount + 1
+	var sd: int
+	if(@Turn)
+		do sd :: 1
+	else
+		do sd :: 10
+	end if
+	var turnablenot: bool
+	for g(0, 63)
+		if(@Sall[g] = 0)
+			do @turncheck1(g, false, sd)
+			do @turncheck2(g, false, sd)
+			do @turncheck3(g, false, sd)
+			if(@stoneable = true)
+				do @Turnstonesall.add(@turnstones)
+				do @Sable.add(g)
+				do @turnstones :: 0
+				do @stoneable :: false
+				do turnablenot :: true
+			end if
+		end if
+	end for
+	if(turnablenot = false)
+		var notice: wnd@MsgBoxResult :: wnd@msgBox(null, "打てる場所がありません", null, %info, %ok)
+		do @Rsop()
+	end if
+end func
+var result: int
+func Rsop()
+	for a(0, 63)
+		if(@Sall[a] = 1)
+			do @result :: @result + 1
+		elif(@Sall[a] = 10)
+			do @result :: @result - 1
+		end if
+	end for
+	if(@result < 0)
+		var rout1: wnd@MsgBoxResult :: wnd@msgBox(null, "White won!!" ~ @result.toStr(), "Result", %info, %ok)
+	elif(@result > 0)
+		var rout2: wnd@MsgBoxResult :: wnd@msgBox(null, "Black won!!" ~ @result.toStr(), "Result", %info, %ok)
+	else
+		var rout3: wnd@MsgBoxResult :: wnd@msgBox(null, "Draw!!", "Result", %info, %ok)
+	end if
+	do @result :: 0
+	do @Passcount :: 0
+	do @Ngop(@Ng)
+end func
+;ひっくり返し反応縦横
+func turncheck1(a: int, bl: bool, sd: int)
+	var b: int :: (a % 8)
+	var c: int :: ((a - b) / 8)
+	var check: int
+	if s(b <= 5 & @Sall[a] + @Sall[a + 1] + sd = 11)
+		for d(0, 5 - b)
+			do check :: check + @Sall[a + d + 2]
+			if(@Turn & check = 1 + d * 10)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a + f] :: 1
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break s
+			elif(@Turn = false & check = 10 + d)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a + f] :: 10
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break s
+			end if
+		end for
+		do @none :: @none + 1
+	else
+		do @none :: @none + 1
+	end if
+	do check :: 0
+	if t(2 <= b & @Sall[a] + @Sall[a - 1] + sd = 11)
+		for d(0, b - 2)
+			do check :: check + @Sall[a - d - 2]
+			if(@Turn & check = 1 + d * 10)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a - f] :: 1
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break t
+			elif(@Turn = false & check = 10 + d)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a - f] :: 10
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break t
+			end if
+		end for
+		do @none :: @none + 1
+	else
+		do @none :: @none + 1
+	end if
+	do check :: 0
+	if s(c <= 5 & @Sall[a] + @Sall[a + 8] + sd = 11)
+		for d(0, 5 - c)
+			do check :: check + @Sall[a + d * 8 + 16]
+			if(@Turn & check = 1 + d * 10)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a + f * 8] :: 1
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break s
+			elif(@Turn = false & check = 10 + d)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a + f * 8] :: 10
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break s
+			end if
+		end for
+		do @none :: @none + 1
+	else
+		do @none :: @none + 1
+	end if
+	do check :: 0
+	if t(2 <= c & @Sall[a] + @Sall[a - 8] + sd = 11)
+		for d(0, c - 2)
+			do check :: check + @Sall[a - d * 8 - 16]
+			if(@Turn & check = 1 + d * 10)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a - f * 8] :: 1
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break t
+			elif(@Turn = false & check = 10 + d)
+				if(bl = true)
+					for f(1, d + 1)
+						do @Sall[a - f * 8] :: 10
+					end for
+				else
+					do @turnstones :+ (d + 1)
+					do @stoneable :: true
+				end if
+				break t
+			end if
+		end for
+		do @none :: @none + 1
+	else
+		do @none :: @none + 1
+	end if
+end func
+;ひっくり返し反応斜め左上から右下
+func turncheck2(a: int, bl: bool, sd: int)
+	var b: int :: a % 8
+	var g: int :: (a - b) / 8
+	var c: int :: 8 - ((b - g).abs())
+	var y: int
+	if(b <= g)
+		do y :: b
+	else
+		do y :: g
+	end if
+	var check: int
+	if s(y <= c - 2)
+		if(@Sall[a] + @Sall[a + 9] + sd = 11)
+			for d(0, c - 3 - y)
+				do check :: check + @Sall[a + d * 9 + 18]
+				if(@Turn & check = 1 + d * 10)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a + f * 9] :: 1
+						end for
+					else
+						do @turnstones :+ (d + 1)
+						do @stoneable :: true
+					end if
+					break s
+				elif(@Turn = false & check = 10 + d)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a + f * 9] :: 10
+						end for
+					else
+						do @turnstones :+ (d + 1)
+						do @stoneable :: true
+					end if
+					break s
+				end if
+			end for
+			do @none :: @none + 1
+		else
+			do @none :: @none + 1
+		end if
+	else
+		do @none :: @none + 1
+	end if
+	do check :: 0
+	if s(2 <= y)
+		if(@Sall[a] + @Sall[a - 9] + sd = 11)
+			for d(0, y - 2)
+				do check :: check + @Sall[a - d * 9 - 18]
+				if(@Turn & check = 1 + d * 10)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a - f * 9] :: 1
+						end for
+					else
+						do @turnstones :+ (d + 1)
+						do @stoneable :: true
+					end if
+					break s
+				elif(@Turn = false & check = 10 + d)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a - f * 9] :: 10
+						end for
+					else
+						do @turnstones :+ (d + 1)
+						do @stoneable :: true
+					end if
+					break s
+				end if
+			end for
+			do @none :: @none + 1
+		else
+			do @none :: @none + 1
+		end if
+	else
+		do @none :: @none + 1
+	end if
+end func
+;斜め反応右上から左下
+func turncheck3(a: int, bl: bool, sd: int)
+	var b: int :: a % 8
+	var g: int :: (a - b) / 8
+	var c: int :: 8 - ((b + g - 8).abs())
+	var y: int
+	if(8 - b <= g)
+		do y :: 8 - b
+	else
+		do y :: g
+	end if
+	var check: int
+	if s(y <= c - 2)
+		if(@Sall[a] + @Sall[a + 7] + sd = 11)
+			for d(0, c - 3 - y)
+				do check :: check + @Sall[a + d * 7 + 14]
+				if(@Turn & check = 1 + d * 10)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a + f * 7] :: 1
+						end for
+					else
+						do @stoneable :: true
+						do @turnstones :+ (d + 1)
+					end if
+					break s
+				elif(@Turn = false & check = 10 + d)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a + f * 7] :: 10
+						end for
+					else
+						do @stoneable :: true
+						do @turnstones :+ (d + 1)
+					end if
+					break s
+				end if
+			end for
+			do @none :: @none + 1
+		else
+			do @none :: @none + 1
+		end if
+	else
+		do @none :: @none + 1
+	end if
+	do check :: 0
+	if s(2 <= y)
+		if(@Sall[a] + @Sall[a - 7] + sd = 11)
+			for d(0, y - 2)
+				do check :: check + @Sall[a - d * 7 - 14]
+				if(@Turn & check = 1 + d * 10)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a - f * 7] :: 1
+						end for
+					else
+						do @stoneable :: true
+						do @turnstones :+ (d + 1)
+					end if
+					break s
+				elif(@Turn = false & check = 10 + d)
+					if(bl = true)
+						for f(1, d + 1)
+							do @Sall[a - f * 7] :: 10
+						end for
+					else
+						do @stoneable :: true
+						do @turnstones :+ (d + 1)
+					end if
+					break s
+				end if
+			end for
+			do @none :: @none + 1
+		else
+			do @none :: @none + 1
+		end if
+	else
+		do @none :: @none + 1
+	end if
+end func
+func Auto()
+	if(@Turn <> @Turnfirst)
+		var Scores: dict<int, int>
+		do Scores :: #dict<int, int>
+		do @Sable.head()
+		do @Turnstonesall.head()
+		while(!@Turnstonesall.term())
+			do Scores.add(@Sable.get(), @Turnstonesall.get())
+			do @Turnstonesall.next()
+			do @Sable.next()
+		end while
+		var b: int
+		var c: int
+		var e: int
+		for r(0, 63)
+			do b :: Scores.get(r)
+			if(b > c)
+				do c :: b
+				do e :: r
+			end if
+		end for
+		do @bautoop(e)
+	end if
+	
+end func
+;描画系
+var Draw: wnd@Draw
+func Drawing()
+	do draw@rectLine(50.0, 50.0, 800.0, 800.0, 0xFFFFFFFF)
+	for c(1, 7)
+		do draw@line(c $ float * 100.0 + 50.0, 50.0, c $ float * 100.0 + 50.0, 850.0, 0xFFFFFFFF)
+		do draw@line(50.0, c $ float * 100.0 + 50.0, 850.0, c $ float * 100.0 + 50.0, 0xFFFFFFFF)
+	end for
+	for a(0, 7)
+		for b(0, 7)
+			if(@Sall[a * 8 + b] = 1)
+				do draw@circle((b + 1) $ float * 100.0, (a + 1) $ float * 100.0, 40.0, 40.0, 0xFF777777)
+			elif(@Sall[a * 8 + b] = 10)
+				do draw@circle((b + 1) $ float * 100.0, (a + 1) $ float * 100.0, 40.0, 40.0, 0xFFFFFFFF)
+			end if
+		end for
+	end for
+	do @Sable.head()
+	while(!@Sable.term())
+		var x: int :: @Sable.get()
+		if(@Sall[x] = 0)
+			var a: int :: x % 8
+			var b: int :: (x - a) / 8
+			do draw@rect(50.0 + a $ float * 100.0, 50.0 + b $ float * 100.0, 100.0, 100.0, 0x33FF0000)
+		end if
+		do @Sable.next()
+	end while
+	
+	do draw@render(30)
+end func
